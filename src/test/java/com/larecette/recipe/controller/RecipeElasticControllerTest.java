@@ -114,7 +114,7 @@ class RecipeElasticControllerTest {
         recipeElastic.setDifficulty(5);
         recipeElastic.setRecipeName("Salad");
         recipeElastic.setTime(15);
-        recipeElastic.setRecipeId(RANDOM_ID);
+        recipeElastic.setRecipeId(RANDOM_ID.toString());
 
     }
 

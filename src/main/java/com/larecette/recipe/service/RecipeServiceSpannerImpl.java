@@ -39,8 +39,12 @@ public class RecipeServiceSpannerImpl implements RecipeService {
 
     @Override
     public RecipeOutDto getRecipeDtoById(UUID recipeId) {
-        RecipeSpanner recipeSpanner = recipeSpannerRepository.findByRecipeId(recipeId);
-        return recipeMapper.convertToRecipeQueryDto(recipeSpanner);
+        RecipeSpanner recipeSpanner = recipeSpannerRepository.findById(recipeId).orElse(null);
+        if (recipeSpanner == null) {
+            return null;
+        } else {
+            return recipeMapper.convertToRecipeQueryDto(recipeSpanner);
+        }
     }
 
     @Override
@@ -53,6 +57,9 @@ public class RecipeServiceSpannerImpl implements RecipeService {
     @Transactional
     public RecipeOutDto createRecipe(RecipeInsideDto recipeInsideDto) {
         RecipeSpanner recipeSpanner = recipeMapper.convertToRecipeEntity(recipeInsideDto);
+        if (recipeInsideDto.getRecipeId() != null){
+            recipeSpanner.setRecipeId(recipeInsideDto.getRecipeId());
+        }
         List<IngredientSpanner> ingredientSpannerList = createIngredients(recipeInsideDto);
         recipeSpanner.setDifficulty(calculateDifficulty(recipeInsideDto));
         recipeSpanner.setCalories(calculateCalories(ingredientSpannerList));
@@ -92,6 +99,7 @@ public class RecipeServiceSpannerImpl implements RecipeService {
         Boolean exists = recipeSpannerRepository.existsById(recipeId);
         if (exists) {
             recipeSpannerRepository.deleteById(recipeId);
+
         }
         log.info("Recipe with id " + recipeId + " deleted");
         return exists;
