@@ -6,6 +6,7 @@ public class TestClass {
      */
 
     public static void main(String[] args) {
-        System.out.println("Some text testadd");
+        System.out.println("Some text testadd2");
+        System.out.println("Again some text");
     }
 }
